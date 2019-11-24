@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: YOUR_NAME_CONFIGMAP
+  labels:
+    app: YOUR_NAME
+data:
+  URL: "http://localhost:8080"

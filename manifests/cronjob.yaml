@@ -1,0 +1,27 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ $job.name | lower }}
+  labels:
+    draft: {{ default "draft-app" $.Values.draft }}
+    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+spec:
+  schedule: "{{ $job.schedule }}"
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: {{ $job.maxDuration }}
+      parallelism: 1
+      template:
+        spec:
+          containers:
+            - name: {{ $.Chart.Name }}
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              env:
+                - name: JOB_NAME
+                  value: {{ $job.name }}
+- name: {{ $key }}
+  value: "{{ $value }}"
+resources:
+  {{ toYaml $.Values.resources | trim | indent 16 }}
+restartPolicy: OnFailure
