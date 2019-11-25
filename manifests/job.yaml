@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: YOUR_NAME-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: YOUR_NAME-job
+          image: YOUR_IMAGE
+          env:
+            - name: URL
+              value: "http://SOME_SERVICE"
+      restartPolicy: Never
+  backoffLimit: 4

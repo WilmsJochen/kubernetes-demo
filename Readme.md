@@ -124,3 +124,7 @@ Now we need to apply the configmap `kubectl apply -f manifests/configmap.yaml` a
 
 Second question is which url we should configure. Therefore we need to look up the service name `kubectl get service`. And we can simply fill in the service name as a url.
 
+INFO:
+
+This link can be useful to create a cron expression.
+https://crontab.guru

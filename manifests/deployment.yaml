@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: YOUR_NAME
+  name: YOUR_NAME-deployment
   labels:
     app: YOUR_NAME
 spec:
@@ -15,7 +15,7 @@ spec:
         app: YOUR_NAME
     spec:
       containers:
-        - name: YOUR_NAME
+        - name: YOUR_NAME-deployment
           image: YOUR_IMAGE
           ports:
             - containerPort: 8080
