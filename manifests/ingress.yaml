@@ -1,0 +1,12 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: DON'T ADD A NEW INGRESS PLEASE
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /YOUR_NAME
+            backend:
+              serviceName: YOUR_NAME-service
+              servicePort: 80
