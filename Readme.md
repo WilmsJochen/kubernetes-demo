@@ -2,6 +2,9 @@
 
 in this exercise, the goal is to deploy your previously created docker image in the kubernetes cluster. And discover each others secret messages.
 
+## check out all the yaml files in the manifest folder. These describe all the kubernetes resources.
+Have a quick look on how all these manifest describe kubernetes resources. You can always ask some questions. 
+
 ## Checkout git repo.
 1. Change your directory back to YOUR_NAME. Use `cd` to go back to your home folder.
     ```
@@ -19,10 +22,7 @@ in this exercise, the goal is to deploy your previously created docker image in 
 3. Change directory to exercise 2.
     ```
     cd ex2/
-    ```
-
-## checkout all the yaml files. These describe all the kubernetes resources.
-Have a quick look on how all these manifest describe kubernetes resources. You can always ask some questions.
+    ``
 
 ## get to know some kubectl commands
 
