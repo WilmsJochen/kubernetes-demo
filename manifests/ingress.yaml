@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: kubernetestalk
+  name: DO_NOT_APPLY_THIS_INGRESS
 spec:
   rules:
     - http:

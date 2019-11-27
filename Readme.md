@@ -42,8 +42,8 @@ kubectl get pod
 kubectl get OTHER_RESOURCE 
 kubectl describe pod POD_NAME
 kubectl describe OTHER_RESOURCE RESOURCE_NAME
-kubectl edit pod POD_NAME
-kubectl edit OTHER_RESOURCE RESOURCE_NAME
+KUBE_EDITOR="nano" kubectl edit pod POD_NAME
+KUBE_EDITOR="nano" kubectl edit OTHER_RESOURCE RESOURCE_NAME
 kubectl logs POD_NAME       
 ```
 
@@ -109,7 +109,7 @@ kubectl get ingress
 Because we only want 1 ingress controller and different path's for all our services, we are going to edit this ingress instead of applying/overwriting the ingress.
 I think we can have some merge conflicts as people are adding their path's on the same time. Ask permission to edit this ingress before editing it.
 ```
-kubectl edit ingress
+KUBE_EDITOR="nano" kubectl edit ingress
 ```
 
 Add the following statement in the correct place.
