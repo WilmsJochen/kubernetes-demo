@@ -22,7 +22,7 @@ Have a quick look on how all these manifest describe kubernetes resources. You c
 3. Change directory to exercise 2.
     ```
     cd ex2/
-    ``
+    ```
 
 ## get to know some kubectl commands
 
@@ -46,8 +46,7 @@ Editing the manifest can be done with nano from the terminal.
 ```
 nano manifests/pod.yaml
 ```
-your image name looks like: `eu.gcr.io/kubernetes-talk-259721/YOUR_NAME:V1.0 `
-**_TIP:_**  When you're finished editing, you exit nano with ctrl+x.
+**_TIP:_**  your image name looks like: `eu.gcr.io/kubernetes-talk-259721/YOUR_NAME:V1.0 `
 
 Apply the pod manifest to your cluster.
 ```
@@ -74,6 +73,7 @@ Apply your deployment to the cluster.
 kubectl apply -f manifests/deployment.yaml
 ```
 Play with the number of replicas.
+
 **_NOTE:_**  Please scale only to 2 pods so we don't overload our small cluster with a lot of pods.
 ```
 kubectl scale deployment YOUR_NAME --replicas 2
@@ -97,24 +97,14 @@ From this point we can talk to a service instead of a pod. But to expose this se
 Luckily for us most of the cloud providers support ingress and will automatically assign an ip.
 Form this ingress we can route a path to our service.
 
-As you can see there is already an ingress controller defined in our cluster.
+As you can see there is already an ingress controller defined in our cluster. From this command you will see the ip where it is running on.
 ```
 kubectl get ingress
 ```
 
-Because we only want 1 ingress controller and different path's for all our services, we are going to edit this ingress instead of applying/overwriting the ingress.
-To avoid conflicts as people are adding their path's at the same time. First ask permission before editing the ingress.
-```
-KUBE_EDITOR="nano" kubectl edit ingress
-```
+Because we only want 1 ingress controller and different path's for all our services, the ingress controller should be configured with your path and service.
+Please ask me to do it together. This way we lower the chance to breaking this controller and loosing out ip address.
 
-Add the following statement in the correct place.
-```
-  - path: /YOUR_NAME
-    backend:
-      serviceName: YOUR_NAME-service
-      servicePort: YOUR_NAME-http
-```
 
 Now you can go browse to the ingress on your path. It will look like http://xx.xx.xx.xx/YOUR_NAME
 
