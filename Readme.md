@@ -20,18 +20,9 @@ in this exercise, the goal is to deploy your previously created docker image in 
     ```
     cd ex2/
     ```
-   
-## Sorts of kubernetes concept:
-- Pod
-- deployment
-- service
-- configmap
-- job
-- cronjob
-- ingress
 
-These are all the kubernetes concepts we will certainly touch today. You can find an example of how the resources are defined in the manifest folder.
-I invite you to first take a look on all these definitions. There are more
+## checkout all the yaml files. These describe all the kubernetes resources.
+Have a quick look on how all these manifest describe kubernetes resources. You can always ask some questions.
 
 ## get to know some kubectl commands
 
@@ -49,16 +40,16 @@ kubectl logs POD_NAME
 
 ## deploy your first pod with your docker image.
 
-You can simply deploy a pod with the definition you found in the manifest. You need to adapt that definition with your own variables.
-Editing the variables can be done with nano from the terminal. 
+You can simply deploy a pod with the definition you found in the manifest. You need to adapt that definition with your own name.
+Editing the manifest can be done with nano from the terminal. 
 
 ```
 nano manifests/pod.yaml
 ```
 
-**_TIP:_**  when you are ready editing, you exit nano with ctrl+x.
+**_TIP:_**  When you're finished editing, you exit nano with ctrl+x.
 
-Now you can apply the pod manifest to your cluster.
+Apply the pod manifest to your cluster.
 ```
 kubectl apply -f manifests/pod.yaml
 ```
@@ -66,14 +57,14 @@ kubectl apply -f manifests/pod.yaml
 Congratulations! Your own docker image is running in a kubernetes cluster.
 You can verify that the pod is running with `kubctl get pod`
 
-## Make a deployment from you pod.
+## Make a deployment from your pod.
 
-First we need to delete your pod from the cluster to make some space.
+First we need to cleanup our cluster to make some space.
 ```
 kubectl delete pod POD_NAME
 ```
 
-Now we need to modify the deployment.yaml file with our own variables.
+Now we need to modify the deployment.yaml file with your own name.
 ```
 nano manifests/deployment.yaml
 ```
@@ -82,7 +73,7 @@ Apply your deployment to the cluster.
 ```
 kubectl apply -f manifests/deployment.yaml
 ```
-Play with the number of replicas you want to have of your deployment.
+Play with the number of replicas.
 **_NOTE:_**  Please scale only to 2 pods so we don't overload our small cluster with a lot of pods.
 ```
 kubectl scale deployment YOUR_NAME --replicas 2
@@ -91,6 +82,10 @@ And scale back to 1 pod after you have verified the scaling with `kubectl get po
 ```
 kubectl scale deployment YOUR_NAME --replicas 1
 ```
+Delete the pod created by the deployment and look what happens. 
+```
+kubectl delete pod POD_NAME
+```
 
 ## Expose your service to the world.
 To communicate with a pod from a specific deployment, we need to add a service to these pods. We don't care which pod, as long as we have one available.
@@ -98,7 +93,8 @@ To communicate with a pod from a specific deployment, we need to add a service t
 kubectl apply -f manifests/service.yaml
 ```
 
-From this point we can talk to a service instead of a pod. But to expose this service to the outside world, we need to have a public ip address. Luckily for us most of the cloud providers support ingress and will automatically assign an ip for us.
+From this point we can talk to a service instead of a pod. But to expose this service to the outside world, we need to have a public ip address. 
+Luckily for us most of the cloud providers support ingress and will automatically assign an ip.
 Form this ingress we can route a path to our service.
 
 As you can see there is already an ingress controller defined in our cluster.
@@ -107,7 +103,7 @@ kubectl get ingress
 ```
 
 Because we only want 1 ingress controller and different path's for all our services, we are going to edit this ingress instead of applying/overwriting the ingress.
-I think we can have some merge conflicts as people are adding their path's on the same time. Ask permission to edit this ingress before editing it.
+To avoid conflicts as people are adding their path's at the same time. First ask permission before editing the ingress.
 ```
 KUBE_EDITOR="nano" kubectl edit ingress
 ```
@@ -117,19 +113,19 @@ Add the following statement in the correct place.
   - path: /YOUR_NAME
     backend:
       serviceName: YOUR_NAME-service
-      servicePort: 80
+      servicePort: YOUR_NAME-http
 ```
 
-Now you can go to the ip of the ingress on your path in your browser. It will look like http://xx.xx.xx.xx/YOUR_NAME
+Now you can go browse to the ingress on your path. It will look like http://xx.xx.xx.xx/YOUR_NAME
 
-## Time to communicate to each other with a job. 
+## Time to communicate with each others. 
 
 This is the moment you can create a docker image from the Jobs folder in Ex1. In the job folder you will find some code that will execute a http request and stop running.
-As you can see this use case won't fit in a regular deployment. This why kubernetes added some jobs and cronjobs. Cronjobs are fancy jobs that will execute at a given time.
+As you can see this use case won't fit in a regular deployment. This is why kubernetes added some jobs and cronjobs.
 
 You can again apply the manifest after configuring you own variables.
 
-As you can see the Job failed because the url wasn't set correctly. The code is configured to read this url from an environment variable named URL.
+As you can see the Job failed because the url wasn't configured. The code will read the url from an environment variable named URL.
 There are 2 ways to add an environment variable: 
 
 1. add the environment directly in the container config of the deployment.
@@ -159,7 +155,7 @@ There are 2 ways to add an environment variable:
 
 
 ## Tips:
-- If something is wrong in the pod, you can see log of your application with `kubectl logs POD_NAME`
+- If something is wrong in the pod, you can see logs of your application with `kubectl logs POD_NAME`
 
 - If something is wrong in your manifest, you can see a description with `kubectl describe KIND NAME`
 
