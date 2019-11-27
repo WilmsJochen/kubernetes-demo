@@ -46,7 +46,7 @@ Editing the manifest can be done with nano from the terminal.
 ```
 nano manifests/pod.yaml
 ```
-
+your image name looks like: `eu.gcr.io/kubernetes-talk-259721/YOUR_NAME:V1.0 `
 **_TIP:_**  When you're finished editing, you exit nano with ctrl+x.
 
 Apply the pod manifest to your cluster.
