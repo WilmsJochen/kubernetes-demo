@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: DON'T ADD A NEW INGRESS PLEASE
+  name: kubernetestalk
 spec:
   rules:
     - http:
@@ -9,4 +9,4 @@ spec:
           - path: /YOUR_NAME
             backend:
               serviceName: YOUR_NAME-service
-              servicePort: 80
+              servicePort: YOUR_NAME-http
