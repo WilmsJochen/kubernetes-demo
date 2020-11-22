@@ -1,6 +1,5 @@
 # Ex2: Deploy your own docker container in the kubernetes cluster.
-
-in this exercise, the goal is to deploy your previously created docker image in the kubernetes cluster. And discover each others secret messages.
+In this exercise, the goal is to deploy your previously created docker image in the kubernetes cluster. While doing this you can discover each other secret messages.
 
 ## check out all the yaml files in the manifest folder. These describe all the kubernetes resources.
 Have a quick look on how all these manifest describe kubernetes resources. You can always ask some questions. 
@@ -46,7 +45,7 @@ Editing the manifest can be done with nano from the terminal.
 ```
 nano manifests/pod.yaml
 ```
-**_TIP:_**  your image name looks like: `eu.gcr.io/kubernetes-talk-259721/YOUR_NAME:V1.0 `
+**_TIP:_**  your image name looks like: `eu.gcr.io/kubernetestalk-295018/YOUR_NAME:V1.0 `
 
 Apply the pod manifest to your cluster.
 ```
@@ -54,7 +53,7 @@ kubectl apply -f manifests/pod.yaml
 ```
 
 Congratulations! Your own docker image is running in a kubernetes cluster.
-You can verify that the pod is running with `kubctl get pod`
+You can verify that the pod is running with the command`kubctl get pod`
 
 ## Make a deployment from your pod.
 
@@ -87,31 +86,44 @@ Delete the pod created by the deployment and look what happens.
 kubectl delete pod POD_NAME
 ```
 
-## Expose your service to the world.
+## Create a service
 To communicate with a pod from a specific deployment, we need to add a service to these pods. We don't care which pod, as long as we have one available.
+```
+nano manifests/service.yaml
+```
+Make sure to name the service selector exactly the same as your deployment matchlabel value in the config.
+If you followed the guidelines, this will be your name.
+
 ```
 kubectl apply -f manifests/service.yaml
 ```
 
-From this point we can talk to a service instead of a pod. But to expose this service to the outside world, we need to have a public ip address. 
-Luckily for us most of the cloud providers support ingress and will automatically assign an ip.
-Form this ingress we can route a path to our service.
+## Expose your service to the world.
+From this point we can talk to a service instead of a pod. But to expose this service to the outside world, we need to have a public ip address and some routing. 
+Luckily for us most of the cloud providers support ingress and will automatically assign a public ip.
+We only need to create an ingress rule to route traffic to your services.
 
-As you can see there is already an ingress controller defined in our cluster. From this command you will see the ip where it is running on.
+As you can see there is already an ingress defined in our cluster. From this command you will see the ip where it is running on.
 ```
 kubectl get ingress
 ```
-
-Because we only want 1 ingress controller and different path's for all our services, the ingress controller should be configured with your path and service.
-Please ask me to do it together. This way we lower the chance to breaking this controller and loosing out ip address.
-
+To create add your own ingress rule, the ingress.yaml file should be configured
+```
+nano manifests/ingress.yaml
+```
+and applied:
+```
+kubectl apply -f manifests/ingress.yaml
+```
 
 Now you can go browse to the ingress on your path. It will look like http://xx.xx.xx.xx/YOUR_NAME
 
-## Time to communicate with each others. 
+## Time to communicate with each other inside our cluster. 
 
 This is the moment you can create a docker image from the Jobs folder in Ex1. In the job folder you will find some code that will execute a http request and stop running.
-As you can see this use case won't fit in a regular deployment. This is why kubernetes added some jobs and cronjobs.
+As you can see this use case won't fit in a regular deployment. This is why kubernetes added some jobs and cronjob resources.
+
+NOTE: To save time you can also use the `eu.gcr.io/kubernetestalk-295018/job`
 
 You can again apply the manifest after configuring you own variables.
 
@@ -129,7 +141,7 @@ There are 2 ways to add an environment variable:
            - name: URL
              value: "localhost:8080"
     ```
-2. Or by grouping them in a configmap, and add a reference to that configmap in the manifest.
+2. Be cool, group env variables in a configmap, add a reference to that configmap in the containers config of your resource.
     ```
      containers:     
         - name: YOUR_NAME
