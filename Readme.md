@@ -1,58 +1,70 @@
-# Ex2: Deploy your own docker container in the kubernetes cluster.
-In this exercise, the goal is to deploy your previously created docker image in the kubernetes cluster. While doing this you can discover each other secret messages.
+# Exercise: Deploy your own docker container in the kubernetes cluster.
+In this exercise, the goal is to deploy your previously created docker image in a kubernetes cluster.
 
-## check out all the yaml files in the manifest folder. These describe all the kubernetes resources.
-Have a quick look on how all these manifest describe kubernetes resources. You can always ask some questions. 
 
-## Checkout git repo.
-1. Change your directory back to YOUR_NAME. Use `cd` to go back to your home folder.
+## Environment
+You can execute this exercise on all machines with a connection to a k8's cluster. In case of issues, you could use the playgrounds of killercoda.
+https://killercoda.com/playgrounds/scenario/kubernetes
+
+## Instructions
+
+### check out all the yaml files in the manifest folder. These define some basic kubernetes resources.
+Have a quick look on how all these manifest define kubernetes resources.
+
+### Checkout git repo.
+
+1. Clone this exercise repo.
     ```
-    * YOUR_NAME
-      * ex1
-        * Gp
-        * nodeJs
-        * python
-        * Readme
-    ```
-2. In this directory you can clone the second exercise repo.
-    ```
-    git clone https://github.com/WilmsJochen/ex2.git
+    git clone https://github.com/WilmsJochen/kubernetes-demo.git
     ```
 3. Change directory to exercise 2.
     ```
-    cd ex2/
+    cd kubernetes-demo
     ```
 
-## get to know some kubectl commands
+### get to know some kubectl commands
 
 Execute following commands and investigate their output. Fill in the Names with a name you found in the get command.
 
 ```
+** kubectl get RESOURCE **
 kubectl get pod
-kubectl get OTHER_RESOURCE 
+kubectl get deployment
+
+** kubectl describe RESOURCE RESOURCE_NAME **
 kubectl describe pod POD_NAME
-kubectl describe OTHER_RESOURCE RESOURCE_NAME
+kubectl describe deployment DEPLOYMENT_NAME
+
+** kubectl edit RESOURCE RESOURCE_NAME **
 KUBE_EDITOR="nano" kubectl edit pod POD_NAME
-KUBE_EDITOR="nano" kubectl edit OTHER_RESOURCE RESOURCE_NAME
-kubectl logs POD_NAME       
+
+** kubectl apply -f YAML_FILE **
+kubectl apply -f ./manifest/pod-example.yaml
+
+** kubectl logs POD_NAME **
+kubectl logs example-pod       
+
+** kubectl edit RESOURCE RESOURCE_NAME **
+kubectl delete example-pod
+    
 ```
 
-## deploy your first pod with your docker image.
+### deploy a pod with your docker image of choice.
 
-You can simply deploy a pod with the definition you found in the manifest. You need to adapt that definition with your own name.
-Editing the manifest can be done with nano from the terminal. 
+You can deploy pods by applying the manifest pod.yaml. Please adapt the yaml according to your preferences and your image.
+Editing the manifest can be done with nano from inside the terminal or any other editing tool. 
 
 ```
 nano manifests/pod.yaml
 ```
-**_TIP:_**  your image name looks like: `eu.gcr.io/kubernetestalk-295018/YOUR_NAME:V1.0 `
+**_TIP:_**  your image name looks like: `REPO_NAME/YOUR_NAME:VERSION `
 
 Apply the pod manifest to your cluster.
 ```
 kubectl apply -f manifests/pod.yaml
 ```
 
-Congratulations! Your own docker image is running in a kubernetes cluster.
+Congratulations! Your docker image of choice is running in a kubernetes cluster.
 You can verify that the pod is running with the command`kubctl get pod`
 
 ## Make a deployment from your pod.
@@ -62,7 +74,7 @@ First we need to cleanup our cluster to make some space.
 kubectl delete pod POD_NAME
 ```
 
-Now we need to modify the deployment.yaml file with your own name.
+Now we need to modify the deployment.yaml file with your own variables.
 ```
 nano manifests/deployment.yaml
 ```
@@ -73,13 +85,13 @@ kubectl apply -f manifests/deployment.yaml
 ```
 Play with the number of replicas.
 
-**_NOTE:_**  Please scale only to 2 pods so we don't overload our small cluster with a lot of pods.
 ```
-kubectl scale deployment YOUR_NAME --replicas 2
+kubectl scale deployment DEPLOYMENT_NAME --replicas 2
 ```
+
 And scale back to 1 pod after you have verified the scaling with `kubectl get pods`.
 ```
-kubectl scale deployment YOUR_NAME --replicas 1
+kubectl scale deployment DEPLOYMENT_NAME --replicas 1
 ```
 Delete the pod created by the deployment and look what happens. 
 ```
@@ -116,14 +128,14 @@ and applied:
 kubectl apply -f manifests/ingress.yaml
 ```
 
-Now you can go browse to the ingress on your path. It will look like http://xx.xx.xx.xx/YOUR_NAME
+Now you could browse to the ingress.
 
 ## Time to communicate with each other inside our cluster. 
 
 This is the moment you can create a docker image from the Jobs folder in Ex1. In the job folder you will find some code that will execute a http request and stop running.
 As you can see this use case won't fit in a regular deployment. This is why kubernetes added some jobs and cronjob resources.
 
-NOTE: To save time you can also use the `eu.gcr.io/kubernetestalk-295018/job`
+NOTE: To save time you can also use the image `desyco/docker-demo-job`
 
 You can again apply the manifest after configuring you own variables.
 
@@ -159,7 +171,7 @@ There are 2 ways to add an environment variable:
 ## Tips:
 - If something is wrong in the pod, you can see logs of your application with `kubectl logs POD_NAME`
 
-- If something is wrong in your manifest, you can see a description with `kubectl describe KIND NAME`
+- If something is wrong in your manifest, you better describe the resource `kubectl describe KIND NAME`
 
 - Use tab key for auto completion of commands.
 

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example-pod
+  labels:
+    app: example
+spec:
+  containers:
+    - name: example-pod
+      image: desyco/docker-demo
+      ports:
+        - containerPort: 8080
